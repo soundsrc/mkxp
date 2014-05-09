@@ -25,10 +25,10 @@
 #endif
 
 #ifndef MPG123_NO_CONFIGURE /* Enable use of this file without configure. */
-@INCLUDE_STDLIB_H@
-@INCLUDE_SYS_TYPE_H@
+#include <stdlib.h>
+#include <sys/types.h>
 
-#if @LARGEFILE_SWITCH@ /* If we need trickery for large file support. */
+#if 0 /* If we need trickery for large file support. */
 
 /* Check for compiling programs agains this libmpg123. */
 #if (defined _FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS+0 == @LARGEFILE_BITS@)
