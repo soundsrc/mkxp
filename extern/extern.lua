@@ -1,3 +1,27 @@
+project "boost"
+	kind "StaticLib"
+	language "C++"
+
+	includedirs {
+		"boost-1.55.0"
+	}
+	
+	files {
+		"boost-1.55.0/libs/program_options/src/*.cpp"
+	}
+
+project "glew"
+	kind "StaticLib"
+	language "C++"
+
+	includedirs {
+		"glew-1.10.0/include"
+	}
+	
+	files {
+		"glew-1.10.0/src/glew.c"
+	}
+
 project "sigc++"
 	kind "SharedLib"
 	language "C++"
@@ -515,7 +539,7 @@ project "SDL2_ttf"
 	links { "SDL2", "z" }
 
 
-project "SDL2_sound"
+project "SDL_sound"
 	kind "SharedLib"
 	language "C"
 	defines {
@@ -641,9 +665,9 @@ project "ruby"
 		"ruby-2.1.2/dln.c",
 		"ruby-2.1.2/localeinit.c",
 		"ruby-2.1.2/main.c",
-		"ruby-2.1.2/dmydln.c",
-		"ruby-2.1.2/miniinit.c",
-		"ruby-2.1.2/miniprelude.c",
+		--"ruby-2.1.2/dmydln.c",
+		--"ruby-2.1.2/miniinit.c",
+		--"ruby-2.1.2/miniprelude.c",
 		"ruby-2.1.2/array.c",
 		"ruby-2.1.2/bignum.c",
 		"ruby-2.1.2/class.c",
@@ -714,3 +738,7 @@ project "ruby"
 		"ruby-2.1.2/prelude.c",
 		"ruby-2.1.2/prelude.c",
 	}
+
+	if os.get() == "macosx" then
+		links { "CoreFoundation.framework" }
+	end
