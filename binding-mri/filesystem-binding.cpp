@@ -25,8 +25,8 @@
 #include "filesystem.h"
 #include "util.h"
 
-#include "ruby/encoding.h"
-#include "ruby/intern.h"
+//#include "ruby/encoding.h"
+//#include "ruby/intern.h"
 
 DEF_TYPE(FileInt);
 
@@ -69,6 +69,16 @@ RB_METHOD(fileIntRead)
 	SDL_RWread(ops, RSTRING_PTR(data), 1, length);
 
 	return data;
+}
+
+RB_METHOD(fileIntGetC)
+{
+	SDL_RWops *ops = getPrivateData<SDL_RWops>(self);
+
+	char v;
+	SDL_RWread(ops,&v, 1, 1);
+
+	return rb_fix_new(v);
 }
 
 RB_METHOD(fileIntClose)
@@ -136,6 +146,9 @@ RB_METHOD(kernelLoadData)
 	return kernelLoadDataInt(filename);
 }
 
+extern "C" VALUE
+rb_file_open(const char *fname, const char *mode);
+
 RB_METHOD(kernelSaveData)
 {
 	RB_UNUSED_PARAM;
@@ -145,7 +158,7 @@ RB_METHOD(kernelSaveData)
 
 	rb_get_args(argc, argv, "oS", &obj, &filename RB_ARG_END);
 
-	VALUE file = rb_file_open_str(filename, "wb");
+	VALUE file = rb_file_open(rb_string_value_ptr(&filename), "wb");
 
 	VALUE marsh = rb_const_get(rb_cObject, rb_intern("Marshal"));
 
@@ -159,9 +172,10 @@ RB_METHOD(kernelSaveData)
 
 static VALUE stringForceUTF8(VALUE arg)
 {
-	if (rb_type(arg) == RUBY_T_STRING && ENCODING_IS_ASCII8BIT(arg))
+#if 0
+	if (rb_type(arg) == T_STRING && ENCODING_IS_ASCII8BIT(arg))
 		rb_enc_associate_index(arg, rb_utf8_encindex());
-
+#endif
 	return arg;
 }
 
@@ -172,6 +186,8 @@ static VALUE customProc(VALUE arg, VALUE proc)
 
 	return obj;
 }
+
+extern "C" VALUE rb_proc_new(VALUE (*func)(ANYARGS), VALUE val);
 
 RB_METHOD(_marshalLoad)
 {
@@ -202,6 +218,7 @@ fileIntBindingInit()
 	rb_define_alloc_func(klass, classAllocate<&FileIntType>);
 
 	_rb_define_method(klass, "read", fileIntRead);
+	_rb_define_method(klass, "getc", fileIntGetC);
 	_rb_define_method(klass, "getbyte", fileIntGetByte);
 	_rb_define_method(klass, "binmode", fileIntBinmode);
 	_rb_define_method(klass, "close", fileIntClose);

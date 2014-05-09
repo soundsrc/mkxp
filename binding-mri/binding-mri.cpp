@@ -28,7 +28,7 @@
 #include "debugwriter.h"
 
 #include <ruby.h>
-#include <ruby/encoding.h>
+//#include <ruby/encoding.h>
 
 #include <string>
 
@@ -169,7 +169,7 @@ RB_METHOD(mriDataDirectory)
 
 	char *path = SDL_GetPrefPath(org, app);
 
-	VALUE pathStr = rb_str_new_cstr(path);
+	VALUE pathStr = rb_str_new2(path);
 
 	SDL_free(path);
 
@@ -178,7 +178,7 @@ RB_METHOD(mriDataDirectory)
 
 static VALUE newStringUTF8(const char *string, long length)
 {
-	return rb_enc_str_new(string, length, rb_utf8_encoding());
+	return rb_str_new(string, length);
 }
 
 struct evalArg
@@ -239,7 +239,7 @@ static void runRMXPScripts()
 
 	VALUE scriptArray = kernelLoadDataInt(scriptPack.c_str());
 
-	if (rb_type(scriptArray) != RUBY_T_ARRAY)
+	if (rb_type(scriptArray) != T_ARRAY)
 	{
 		showMsg("Failed to read script data");
 		return;
@@ -256,7 +256,7 @@ static void runRMXPScripts()
 	{
 		VALUE script = rb_ary_entry(scriptArray, i);
 
-		if (rb_type(script) != RUBY_T_ARRAY)
+		if (rb_type(script) != T_ARRAY)
 			continue;
 
 		VALUE scriptName   = rb_ary_entry(script, 1);
@@ -296,7 +296,7 @@ static void runRMXPScripts()
 			break;
 		}
 
-		rb_ary_store(script, 3, rb_str_new_cstr(decodeBuffer.c_str()));
+		rb_ary_store(script, 3, rb_str_new2(decodeBuffer.c_str()));
 	}
 
 	for (long i = 0; i < scriptCount; ++i)
@@ -327,6 +327,7 @@ static void runRMXPScripts()
 
 static void showExc(VALUE exc)
 {
+#if 0
 	VALUE bt = rb_funcall2(exc, rb_intern("backtrace"), 0, NULL);
 	VALUE bt0 = rb_ary_entry(bt, 0);
 	VALUE name = rb_class_path(rb_obj_class(exc));
@@ -351,12 +352,14 @@ static void showExc(VALUE exc)
 	                      ": %" PRIsVALUE " occured.\n\n%" PRIsVALUE,
 	                      file, line, name, exc);
 	showMsg(StringValueCStr(ms));
+#endif
 }
 
 static void mriBindingExecute()
 {
-	ruby_setup();
-	rb_enc_set_default_external(rb_enc_from_encoding(rb_utf8_encoding()));
+	ruby_init();
+	//ruby_setup();
+	//rb_enc_set_default_external(rb_enc_from_encoding(rb_utf8_encoding()));
 
 	RbData rbData;
 	shState->setBindingData(&rbData);
@@ -369,9 +372,11 @@ static void mriBindingExecute()
 	else
 		runRMXPScripts();
 
+#if 0
 	VALUE exc = rb_errinfo();
 	if (!NIL_P(exc) && !rb_obj_is_kind_of(exc, rb_eSystemExit))
 		showExc(exc);
+#endif
 
 	ruby_cleanup(0);
 

@@ -118,8 +118,11 @@ RB_METHOD(ColorStringify)
 
 	Color *c = getPrivateData<Color>(self);
 
+#if 0
 	return rb_sprintf("(%f, %f, %f, %f)",
 	                  c->red, c->green, c->blue, c->alpha);
+#endif
+	return 0;
 }
 
 RB_METHOD(ToneStringify)
@@ -128,8 +131,11 @@ RB_METHOD(ToneStringify)
 
 	Tone *t = getPrivateData<Tone>(self);
 
+	#if 0
 	return rb_sprintf("(%f, %f, %f, %f)",
 	                  t->red, t->green, t->blue, t->gray);
+#endif
+	return 0;
 }
 
 RB_METHOD(RectStringify)
@@ -138,8 +144,10 @@ RB_METHOD(RectStringify)
 
 	Rect *r = getPrivateData<Rect>(self);
 
+#if 0
 	return rb_sprintf("(%d, %d, %d, %d)",
 	                  r->x, r->y, r->width, r->height);
+#endif
 }
 
 MARSH_LOAD_FUN(Color)

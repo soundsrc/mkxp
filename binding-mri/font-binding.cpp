@@ -105,18 +105,18 @@ fontSetNameHelper(VALUE self, int argc, VALUE *argv,
 	// no text being drawn (everything else is substituted with Arial I think)
 	strncpy(outBuf, "", outLen);
 
-	if (type == RUBY_T_STRING)
+	if (type == T_STRING)
 	{
 		strncpy(outBuf, RSTRING_PTR(arg), outLen);
 	}
-	else if (type == RUBY_T_ARRAY)
+	else if (type == T_ARRAY)
 	{
 		for (long i = 0; i < RARRAY_LEN(arg); ++i)
 		{
 			VALUE str = rb_ary_entry(arg, i);
 
 			/* Non-string objects are tolerated (ignored) */
-			if (rb_type(str) != RUBY_T_STRING)
+			if (rb_type(str) != T_STRING)
 				continue;
 
 			const char *family = RSTRING_PTR(str);
@@ -229,7 +229,7 @@ fontBindingInit()
 
 	Font::setDefaultColor(new Color(*Font::getDefaultColor()));
 	wrapProperty(klass, Font::getDefaultColor(), "default_color", ColorType);
-	rb_iv_set(klass, "default_name", rb_str_new_cstr(Font::getDefaultName()));
+	rb_iv_set(klass, "default_name", rb_str_new2(Font::getDefaultName()));
 
 	INIT_KLASS_PROP_BIND(Font, DefaultName, "default_name");
 	INIT_KLASS_PROP_BIND(Font, DefaultSize, "default_size");

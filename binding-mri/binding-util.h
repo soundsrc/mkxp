@@ -26,6 +26,26 @@
 
 #include "exception.h"
 
+// backwards compatibility
+typedef struct rb_data_type_struct rb_data_type_t;
+
+struct rb_data_type_struct {
+    const char *wrap_struct_name;
+    struct {
+		void (*dmark)(void*);
+		void (*dfree)(void*);
+		size_t (*dsize)(const void *);
+		void *reserved[2]; /* For future extension.
+							This array *must* be filled with ZERO. */
+    } function;
+    const rb_data_type_t *parent;
+    void *data;        /* This area can be used for any purpose
+						by a programmer who define the type. */
+    VALUE flags;       /* FL_WB_PROTECTED */
+};
+
+#define OBJ_INIT_COPY(a,b) (0)
+
 enum RbException
 {
 	RGSS = 0,
@@ -71,7 +91,7 @@ void initType(rb_data_type_struct &type,
 template<rb_data_type_t *rbType>
 static VALUE classAllocate(VALUE klass)
 {
-	return rb_data_typed_object_alloc(klass, 0, rbType);
+	return Data_Wrap_Struct(klass, rbType->function.dmark, rbType->function.dfree, NULL);
 }
 
 template<class C>
@@ -86,21 +106,21 @@ template<class C>
 static inline C *
 getPrivateData(VALUE self)
 {
-	return static_cast<C*>(RTYPEDDATA_DATA(self));
+	return static_cast<C*>(RDATA(self)->data);
 }
 
 template<class C>
 static inline C *
 getPrivateDataCheck(VALUE self, const rb_data_type_struct &type)
 {
-	void *obj = Check_TypedStruct(self, &type);
+	void *obj = RDATA(self)->data;//= Check_TypedStruct(self, &type);
 	return static_cast<C*>(obj);
 }
 
 static inline void
 setPrivateData(VALUE self, void *p)
 {
-	RTYPEDDATA_DATA(self) = p;
+	RDATA(self)->data = p;
 }
 
 inline VALUE
@@ -196,11 +216,11 @@ rb_float_arg(VALUE arg, double *out, int argPos = 0)
 {
 	switch (rb_type(arg))
 	{
-	case RUBY_T_FLOAT :
-		*out = RFLOAT_VALUE(arg);
+	case T_FLOAT :
+		*out = RFLOAT(arg)->value;
 		break;
 
-	case RUBY_T_FIXNUM :
+	case T_FIXNUM :
 		*out = FIX2INT(arg);
 		break;
 
@@ -214,12 +234,12 @@ rb_int_arg(VALUE arg, int *out, int argPos = 0)
 {
 	switch (rb_type(arg))
 	{
-	case RUBY_T_FLOAT :
+	case T_FLOAT :
 		// FIXME check int range?
 		*out = NUM2LONG(arg);
 		break;
 
-	case RUBY_T_FIXNUM :
+	case T_FIXNUM :
 		*out = FIX2INT(arg);
 		break;
 
@@ -233,12 +253,12 @@ rb_bool_arg(VALUE arg, bool *out, int argPos = 0)
 {
 	switch (rb_type(arg))
 	{
-	case RUBY_T_TRUE :
+	case T_TRUE :
 		*out = true;
 		break;
 
-	case RUBY_T_FALSE :
-	case RUBY_T_NIL :
+	case T_FALSE :
+	case T_NIL :
 		*out = false;
 		break;
 
