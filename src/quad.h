@@ -22,7 +22,7 @@
 #ifndef QUAD_H
 #define QUAD_H
 
-#include "glew.h"
+#include "GL/glew.h"
 #include "etc-internal.h"
 #include "gl-util.h"
 #include "sharedstate.h"

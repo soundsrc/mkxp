@@ -19,8 +19,12 @@
 ** along with mkxp.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <glew.h>
-#include <alc.h>
+#include <GL/glew.h>
+#ifdef __APPLE__
+#include <OpenAL/alc.h>
+#else
+#include <AL/alc.h>
+#endif
 
 #include <SDL.h>
 #include <SDL_image.h>

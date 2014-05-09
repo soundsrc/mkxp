@@ -22,7 +22,7 @@
 #include "debuglogger.h"
 #include "debugwriter.h"
 
-#include <glew.h>
+#include <GL/glew.h>
 #include <iostream>
 
 struct DebugLoggerPrivate

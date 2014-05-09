@@ -23,7 +23,7 @@
 #include "shader.h"
 #include "etc.h"
 
-#include <glew.h>
+#include <GL/glew.h>
 
 #include <SDL_rect.h>
 

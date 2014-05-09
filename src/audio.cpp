@@ -45,7 +45,11 @@
 #include <vorbis/vorbisfile.h>
 #endif
 
-#include <alc.h>
+#ifdef __APPLE__
+#include <OpenAL/alc.h>
+#else
+#include <AL/alc.h>
+#endif
 
 #define AUDIO_SLEEP 10
 #define SE_SOURCES 6
@@ -94,6 +98,7 @@ static ALenum chooseALFormat(int sampleSize, int channelCount)
 		case 2 : return AL_FORMAT_STEREO16;
 		default : abort();
 		}
+#if 0 // FIXME
 	case 4 :
 		switch (channelCount)
 		{
@@ -101,6 +106,7 @@ static ALenum chooseALFormat(int sampleSize, int channelCount)
 		case 2 : return AL_FORMAT_STEREO_FLOAT32;
 		default : abort();
 		}
+#endif
 	default : abort();
 	}
 

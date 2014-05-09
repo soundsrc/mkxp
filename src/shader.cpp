@@ -24,7 +24,7 @@
 #include "glstate.h"
 #include "exception.h"
 
-#include <glew.h>
+#include <GL/glew.h>
 
 #include <assert.h>
 #include <iostream>

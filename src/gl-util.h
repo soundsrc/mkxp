@@ -22,7 +22,7 @@
 #ifndef GLUTIL_H
 #define GLUTIL_H
 
-#include <glew.h>
+#include <GL/glew.h>
 
 #include "etc-internal.h"
 
