@@ -18,8 +18,8 @@ project "PhysFS"
 	language "C++"
 
 	includedirs {
-		"physfs-2.0.3",
-		"physfs-2.0.3/zlib123",
+		"physfs",
+		"physfs/zlib123",
 	}
 
 	defines {
@@ -39,50 +39,39 @@ project "PhysFS"
 	}
 
 	files {
-		"physfs-2.0.3/physfs.c",
-		"physfs-2.0.3/physfs_byteorder.c",
-		"physfs-2.0.3/physfs_unicode.c",
-		"physfs-2.0.3/platform/os2.c",
-		"physfs-2.0.3/platform/pocketpc.c",
-		"physfs-2.0.3/platform/posix.c",
-		"physfs-2.0.3/platform/unix.c",
-		"physfs-2.0.3/platform/macosx.c",
-		"physfs-2.0.3/platform/windows.c",
-		"physfs-2.0.3/archivers/dir.c",
-		"physfs-2.0.3/archivers/grp.c",
-		"physfs-2.0.3/archivers/hog.c",
-		"physfs-2.0.3/archivers/lzma.c",
-		"physfs-2.0.3/archivers/mvl.c",
-		"physfs-2.0.3/archivers/qpak.c",
-		"physfs-2.0.3/archivers/wad.c",
-		"physfs-2.0.3/archivers/zip.c",
-		"physfs-2.0.3/lzma/C/7zCrc.c",
-		"physfs-2.0.3/lzma/C/Archive/7z/7zBuffer.c",
-		"physfs-2.0.3/lzma/C/Archive/7z/7zDecode.c",
-		"physfs-2.0.3/lzma/C/Archive/7z/7zExtract.c",
-		"physfs-2.0.3/lzma/C/Archive/7z/7zHeader.c",
-		"physfs-2.0.3/lzma/C/Archive/7z/7zIn.c",
-		"physfs-2.0.3/lzma/C/Archive/7z/7zItem.c",
-		"physfs-2.0.3/lzma/C/Archive/7z/7zMethodID.c",
-		"physfs-2.0.3/lzma/C/Compress/Branch/BranchX86.c",
-		"physfs-2.0.3/lzma/C/Compress/Branch/BranchX86_2.c",
-		"physfs-2.0.3/lzma/C/Compress/Lzma/LzmaDecode.c",
-		"physfs-2.0.3/zlib123/adler32.c",
-		"physfs-2.0.3/zlib123/compress.c",
-		"physfs-2.0.3/zlib123/crc32.c",
-		"physfs-2.0.3/zlib123/deflate.c",
-		"physfs-2.0.3/zlib123/gzio.c",
-		"physfs-2.0.3/zlib123/infback.c",
-		"physfs-2.0.3/zlib123/inffast.c",
-		"physfs-2.0.3/zlib123/inflate.c",
-		"physfs-2.0.3/zlib123/inftrees.c",
-		"physfs-2.0.3/zlib123/trees.c",
-		"physfs-2.0.3/zlib123/uncompr.c",
-		"physfs-2.0.3/zlib123/zutil.c"
+		"physfs/src/physfs.c",
+		"physfs/src/physfs_byteorder.c",
+		"physfs/src/physfs_unicode.c",
+		"physfs/src/platform_posix.c",
+		"physfs/src/platform_unix.c",
+		"physfs/src/platform_macosx.c",
+		"physfs/src/platform_windows.c",
+		"physfs/src/archiver_dir.c",
+		"physfs/src/archiver_unpacked.c",
+		"physfs/src/archiver_grp.c",
+		"physfs/src/archiver_hog.c",
+		"physfs/src/archiver_lzma.c",
+		"physfs/src/archiver_mvl.c",
+		"physfs/src/archiver_qpak.c",
+		"physfs/src/archiver_wad.c",
+		"physfs/src/archiver_zip.c",
+		"physfs/src/archiver_slb.c",
+		"physfs/src/archiver_iso9660.c",
+		"physfs/src/lzma/C/7zCrc.c",
+		"physfs/src/lzma/C/Archive/7z/7zBuffer.c",
+		"physfs/src/lzma/C/Archive/7z/7zDecode.c",
+		"physfs/src/lzma/C/Archive/7z/7zExtract.c",
+		"physfs/src/lzma/C/Archive/7z/7zHeader.c",
+		"physfs/src/lzma/C/Archive/7z/7zIn.c",
+		"physfs/src/lzma/C/Archive/7z/7zItem.c",
+		"physfs/src/lzma/C/Archive/7z/7zMethodID.c",
+		"physfs/src/lzma/C/Compress/Branch/BranchX86.c",
+		"physfs/src/lzma/C/Compress/Branch/BranchX86_2.c",
+		"physfs/src/lzma/C/Compress/Lzma/LzmaDecode.c",
 	}
 
 	if os.get() == "macosx" then
-		links { "CoreFoundation.framework", "Carbon.framework", "CoreServices.framework", "IOKit.framework" }
+		links { "z", "CoreFoundation.framework", "Carbon.framework", "CoreServices.framework", "IOKit.framework" }
 	end
 
 if os.get() == "windows" or os.get() == "android" then
