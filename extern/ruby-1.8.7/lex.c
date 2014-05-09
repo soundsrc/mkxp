@@ -66,7 +66,7 @@ hash (str, len)
 }
 
 #ifdef __GNUC__
-__inline
+//__inline
 #endif
 struct kwtable *
 rb_reserved_word (str, len)

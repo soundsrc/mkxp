@@ -151,7 +151,7 @@ solution "mkxp"
 			"extern/SDL2_image-2.0.0",
 			"extern/SDL2_ttf-2.0.12",
 			"extern/SDL2-2.0.3/include",
-			"extern/ruby-2.1.2/include",
+			"extern/ruby-1.8.7",
 		}
 
 		libdirs { "extern" }
