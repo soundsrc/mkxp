@@ -14,7 +14,7 @@
 
 /* Define RUBY_REVISION to avoid revision.h inclusion via version.h. */
 #define RUBY_REVISION 0
-#include "version.h"
+#include "./version.h"
 
 #ifndef RUBY_ARCH
 #define RUBY_ARCH RUBY_PLATFORM
