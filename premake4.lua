@@ -1,5 +1,6 @@
 solution "mkxp"
 	location(_WORKING_DIR)
+	targetdir(_WORKING_DIR)
 
 	if os.get() == "macosx" then
 		platforms { "Universal" }
